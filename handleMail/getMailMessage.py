@@ -32,10 +32,7 @@ class MailMessage(object):
                 pepole=PepoleInfo(emailAddress,payInfo[:])
                 pepoleList.append(pepole)
         
-        for j in range(len(pepoleList)):
-            
-            print pepoleList[j].getPayInfoParam()
-            print pepoleList[j].getEmailAddressParam()
+        return pepoleList
                 
 class PepoleInfo(object):
     
@@ -48,6 +45,3 @@ class PepoleInfo(object):
     
     def getEmailAddressParam(self):
         return self.emailAddress
-
-test=MailMessage()
-test.getMailMessage()
