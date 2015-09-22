@@ -9,4 +9,4 @@ try:
     import xlrd
 except Exception,e:
     print os.path.dirname(__file__)
-    os.system("cd \d ")
+    os.system("cd \d "+"&&")
