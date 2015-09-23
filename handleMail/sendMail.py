@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import smtplib  
-from email.mime.text import MIMEText  
+from email.mime.text import MIMEText
+from getMailMessage import MailMessage
+   
 mailto_list=["741187338@qq.com"] 
 mail_host="smtp.qq.com"  #设置服务器
 mail_user="1750999809@qq.com"    #用户名
@@ -21,9 +23,26 @@ def send_mail(to_list,sub,content):  #to_list：收件人；sub：主题；conte
         return True  
     except Exception, e:  
         print str(e)  
-        return False  
-if __name__ == '__main__':  
-    if send_mail(mailto_list,"hello","<a href='http://www.cnblogs.com/xiaowuyi'>小五义</a>"):  
-        print "发送成功"  
-    else:  
-        print "发送失败"
+        return False
+  
+if __name__ == '__main__':
+    mailMessage =MailMessage()
+    pepoleList= mailMessage.getMailMessage()
+    mailto_list=[]
+    message="<table&nbspstyle=\"width:100%;\" border=\"1\" bordercolor=\"#000000\" cellpadding=\"2\" cellspacing=\"0\"\>\<tbody><tr><td>"
+    message2=" <td>姓名<br /></td><td>工号<br /></td><td>邮箱<br /></td><td>身份证<br /></td><td>基本工资<br /></td><td>绩效工资<br /></td><td>其他应发<br /></td> \
+                <td>应发合计<br /></td><td>病事假<br /></td><td>扣罚<br /></td><td>代扣费用<br /></td><td>补缴四金<br /></td><td>社保<br /></td><td>公积金<br /></td><td>个税<br /> \
+               </td><td>其他应扣<br /></td><td>应扣合计<br /></td><td>实发收入<br /></td><td>备注<br /></td><td><br /></td></tr>"
+    getMessage="姓名  工号&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp \
+                                    邮箱 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp \
+                                    身份证 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp \
+                                    基本工资  绩效工资  其他应发  应发合计  病事假  扣罚  代扣费用  补缴四金  社保  公积金  个税  其他应扣  应扣合计  实发收入  备注  "+'<br>'
+    for i in range(2,len(pepoleList)):
+        mailto_list.append(str(pepoleList[i].getEmailAddressParam()))
+        for j in pepoleList[i].getPayInfoParam():
+            getMessage=getMessage+str(j)+'&nbsp&nbsp'  
+        if send_mail(mailto_list,str(pepoleList[i].getPayInfoParam()[0])+"工资条",getMessage):  
+            print "发送成功"  
+        else:  
+            print "发送失败"
+    
