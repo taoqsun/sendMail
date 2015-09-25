@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Created on Sep 22, 2015
 
@@ -6,5 +7,4 @@ Created on Sep 22, 2015
 from handleMail.sendMail  import *
 
 if __name__ == '__main__':
-    
-    pass
+    main()

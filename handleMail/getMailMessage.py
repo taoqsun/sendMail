@@ -19,7 +19,7 @@ class MailMessage(object):
         pass
     
     def getMailMessage(self):
-        data = xlrd.open_workbook('../vendors/pay.xlsx')
+        data = xlrd.open_workbook(os.path.split(os.path.dirname(__file__))[0]+'\\vendors\\pay.xlsx')
         table = data.sheets()[0]
         nrows = table.nrows
         ncols = table.ncols

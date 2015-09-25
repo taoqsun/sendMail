@@ -45,7 +45,7 @@ def fdbg(log):
         file_handle.writelines(str(log) + "\n")
         file_handle.close()
   
-if __name__ == '__main__':
+def main():
     mailMessage =MailMessage()
     pepoleList= mailMessage.getMailMessage()
     totalMail=len(pepoleList)-2
