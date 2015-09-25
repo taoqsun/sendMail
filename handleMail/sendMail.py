@@ -36,7 +36,6 @@ def fdbg(log):
             logpath = path[:index] + ".\Logs" 
             if(os.path.exists(logpath) == False):
                 os.mkdir(logpath)
-            print logpath
         else:
             print "Invalid Log file Path."
             return
@@ -74,4 +73,4 @@ if __name__ == '__main__':
             sendFailInfo.append(str(j[0])+','+str(j[1])+','+str(pepoleList[i].getEmailAddressParam()))
         mailto_list=[]
     failInfo="\n".join(sendFailInfo)
-    fdbg("total number to send mail："+str(totalMail)+"send success："+str(sendSuccess)+"\n"+"send fail："+str(sendFail)+"\n"+"fail information："+"\n"+failInfo)
+    fdbg("total number to send mail:"+str(totalMail)+"\n"+"send success:"+str(sendSuccess)+"\n"+"send fail:"+str(sendFail)+"\n"+"fail information："+"\n"+failInfo)
