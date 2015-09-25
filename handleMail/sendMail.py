@@ -3,6 +3,9 @@ import smtplib
 from email.mime.text import MIMEText
 from getMailMessage import MailMessage
 import HTMLParser
+from __builtin__ import str
+import os
+import time
    
 mailto_list=["741187338@qq.com"] 
 mail_host="smtp.qq.com"  #设置服务器
@@ -11,7 +14,7 @@ mail_pass="123456kk"   #口令
 mail_postfix="qq.com"  #发件箱的后缀
   
 def send_mail(to_list,sub,content):  #to_list：收件人；sub：主题；content：邮件内容
-    me="hello"+"<"+mail_user+"@"+mail_postfix+">"   #这里的hello可以任意设置，收到信后，将按照设置显示
+    me="william sun"+"<"+mail_user+"@"+mail_postfix+">"   #这里的hello可以任意设置，收到信后，将按照设置显示
     msg = MIMEText(content,_subtype='html',_charset='utf-8')    #创建一个实例，这里设置为html格式邮件
     msg['Subject'] = sub    #设置主题
     msg['From'] = me  
@@ -25,25 +28,50 @@ def send_mail(to_list,sub,content):  #to_list：收件人；sub：主题；conte
     except Exception, e:  
         print str(e)  
         return False
+    
+def fdbg(log):
+        path = os.path.dirname(__file__)
+        index = path.rfind("handleMail")
+        if(-1 != index):
+            logpath = path[:index] + ".\Logs" 
+            if(os.path.exists(logpath) == False):
+                os.mkdir(logpath)
+            print logpath
+        else:
+            print "Invalid Log file Path."
+            return
+            
+        logfile = logpath + "/" + time.strftime('%Y-%m-%d',time.localtime(time.time())) + ".txt"
+        file_handle = open(logfile,"a+")
+        file_handle.writelines(str(log) + "\n")
+        file_handle.close()
   
 if __name__ == '__main__':
     mailMessage =MailMessage()
     pepoleList= mailMessage.getMailMessage()
+    totalMail=len(pepoleList)-2
     mailto_list=[]
-    message=HTMLParser.HTMLParser().unescape("<table&nbspstyle=\"width:100%;\" border=\"1\" bordercolor=\"#000000\" cellpadding=\"2\" cellspacing=\"0\"\>\<tbody><tr><td>")
-    message2=HTMLParser.HTMLParser().unescape(" <td>姓名<br /></td><td>工号<br /></td><td>邮箱<br /></td><td>身份证<br /></td><td>基本工资<br /></td><td>绩效工资<br /></td><td>其他应发<br /></td> \
-                <td>应发合计<br /></td><td>病事假<br /></td><td>扣罚<br /></td><td>代扣费用<br /></td><td>补缴四金<br /></td><td>社保<br /></td><td>公积金<br /></td><td>个税<br /> \
-               </td><td>其他应扣<br /></td><td>应扣合计<br /></td><td>实发收入<br /></td><td>备注<br /></td><td><br /></td></tr>")
-    getMessage=HTMLParser.HTMLParser().unescape("姓名  工号&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp \
-                                    邮箱 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp \
-                                    身份证 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp \
-                                    基本工资  绩效工资  其他应发  应发合计  病事假  扣罚  代扣费用  补缴四金  社保  公积金  个税  其他应扣  应扣合计  实发收入  备注  "+'<br>')
+    def generate_tr(name, number,number1,number2,number3,number4,number5,number6,number7,number8,number9,number10,number11,number12,number13,number14,number15,number16,number17):
+        return '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' %(name, number,number1,number2,number3,number4,number5,number6,number7,number8,number9,number10,number11,number12,number13,number14,number15,number16,number17)
+    tds = []
+    test1= '<table style="width:100%;" border="1" bordercolor="#000000" cellpadding="2" cellspacing="0">'
+    test2= '<tr><th>姓名</th><th>工号</th><th>邮箱</th><th>身份证</th><th>基本工资</th><th>绩效工资</th><th>其他应发</th><th>应发合计</th><th>病事假</th><th>扣罚</th><th>代扣费用</th><th>补缴四金</th><th>社保</th><th>公积金</th><th>个税</th><th>其他应扣 </th><th>应扣合计 </th><th>实发收入  </th><th>备注 </th><tr>'
+    test4= '</table>'
+    sendSuccess=0
+    sendFail=0
+    sendFailInfo=[]
+    failInfo=''
     for i in range(2,len(pepoleList)):
         mailto_list.append(str(pepoleList[i].getEmailAddressParam()))
-        for j in pepoleList[i].getPayInfoParam():
-            getMessage=getMessage+str(j)+'&nbsp&nbsp'  
-        if send_mail(mailto_list,str(pepoleList[i].getPayInfoParam()[0])+"工资条",message+message2+getMessage):  
-            print "发送成功"  
+        j =pepoleList[i].getPayInfoParam()
+        test3=generate_tr(str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(j[4]),str(j[5]),str(j[6]),str(j[7]),str(j[8]),str(j[9]),str(j[10]),str(j[11]),str(j[12]),str(j[13]),str(j[14]),str(j[15]),str(j[16]),str(j[17]),str(j[18]))
+        if send_mail(mailto_list,str(pepoleList[i].getPayInfoParam()[0])+"工资条",test1+test2+test3+test4):  
+            print "发送成功"
+            sendSuccess=sendSuccess+1
         else:  
             print "发送失败"
-    
+            sendFail=sendFail+1
+            sendFailInfo.append(str(j[0])+','+str(j[1])+','+str(pepoleList[i].getEmailAddressParam()))
+        mailto_list=[]
+    failInfo="\n".join(sendFailInfo)
+    fdbg("total number to send mail："+str(totalMail)+"send success："+str(sendSuccess)+"\n"+"send fail："+str(sendFail)+"\n"+"fail information："+"\n"+failInfo)
