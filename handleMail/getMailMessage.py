@@ -45,7 +45,3 @@ class PepoleInfo(object):
     
     def getEmailAddressParam(self):
         return self.emailAddress
-
-
-# test=MailMessage()
-# print test.getMailMessage()[0].getPayInfoParam()
