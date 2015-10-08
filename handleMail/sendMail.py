@@ -56,7 +56,7 @@ def main():
     test2= '<table style="width:100%;" border="1" bordercolor="#000000" cellpadding="2" cellspacing="0">'
     test3= '<tr><th>姓名</th><th>工号</th><th>邮箱</th><th>身份证</th><th>基本工资</th><th>绩效工资</th><th>其他应发</th><th>应发合计</th><th>病事假</th><th>扣罚</th><th>代扣费用</th><th>补缴四金</th><th>社保</th><th>公积金</th><th>个税</th><th>其他应扣 </th><th>应扣合计 </th><th>实发收入  </th><th>备注 </th><tr>'
     test5= '</table>'
-    
+    test6= '<br/>'+'[郑重提示]'+'<br/>'+'1、 请妥善保管此薪资清单；'+'<br/>'+'2、 薪资属于保密信息，未经授权、许可不得以任何理由向外界透漏自己的薪资信息，也不得以任何理由询问或了解他人的薪资信息； 如因个人原因导致薪资信息泄露，公司将会追究相关责任并进行处罚。'+'<br/>'+'（如有疑问，请联系人事行政部，及时给您回复！）'
     sendSuccess=0
     sendFail=0
     sendFailInfo=[]
@@ -66,7 +66,7 @@ def main():
         j =pepoleList[i].getPayInfoParam()
         test4=generate_tr(str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(j[4]),str(j[5]),str(j[6]),str(j[7]),str(j[8]),str(j[9]),str(j[10]),str(j[11]),str(j[12]),str(j[13]),str(j[14]),str(j[15]),str(j[16]),str(j[17]),str(j[18]))
         test1=str(pepoleList[i].getPayInfoParam()[0])+",你好："+"<br/>"+"&nbsp;&nbsp;&nbsp;"+monthCurr+"月工资清单如下，请查阅："+"<br/>"
-        if send_mail(mailto_list,str(pepoleList[i].getPayInfoParam()[0])+monthCurr+"月工资条",test1+test2+test3+test4+test5):  
+        if send_mail(mailto_list,str(pepoleList[i].getPayInfoParam()[0])+monthCurr+"月工资条",test1+test2+test3+test4+test5+test6):  
             print "发送成功"
             sendSuccess=sendSuccess+1
         else:  
