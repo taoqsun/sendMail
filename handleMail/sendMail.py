@@ -7,19 +7,26 @@ from __builtin__ import str
 import os
 import time
    
-mail_host="smtp.qq.com"
-mail_user="1750999809@qq.com"    #用户名
-mail_pass="123456kk"   #口令 
-mail_postfix="qq.com"  #发件箱的后缀
+mail_host="smtp.sina.com"
+mail_user="fuyao_hr"    #用户名
+mail_pass=""   #口令 
+mail_postfix="sina.com"  #发件箱的后缀
+
+# mail_host="smtp.qq.com"
+# mail_user="1750999809@qq.com"    #用户名
+# mail_pass=""   #口令 
+# mail_postfix="qq.com"  #发件箱的后缀
   
 def send_mail(to_list,sub,content):  #to_list：收件人；sub：主题；content：邮件内容
-    me="william sun"+"<"+mail_user+"@"+mail_postfix+">"   #这里的william sun可以任意设置，收到信后，将按照设置显示
+    titleMessage=str("富爻HR".decode("utf-8").encode("gb2312"))
+    me=titleMessage+"<"+mail_user+"@"+mail_postfix+">"   #这里的william sun可以任意设置，收到信后，将按照设置显示
     msg = MIMEText(content,_subtype='html',_charset='utf-8')
     msg['Subject'] = sub    #设置主题
     msg['From'] = me  
     msg['To'] = ";".join(to_list)  
     try:  
-        s = smtplib.SMTP_SSL("smtp.qq.com",465, timeout=30)  
+        s = smtplib.SMTP_SSL("smtp.sina.com",465, timeout=30)
+#         s = smtplib.SMTP_SSL("smtp.qq.com",465, timeout=30)  
         s.login(mail_user,mail_pass)  
         s.sendmail(me, to_list, msg.as_string())  
         s.close()  
@@ -50,7 +57,8 @@ def main():
     totalMail=len(pepoleList)-2
     mailto_list=[]
     def generate_tr(name, number,number1,number2,number3,number4,number5,number6,number7,number8,number9,number10,number11,number12,number13,number14,number15,number16,number17):
-        return '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' %(name, number,number1,number2,number3,number4,number5,number6,number7,number8,number9,number10,number11,number12,number13,number14,number15,number16,number17)
+        return '<tr><td>{0:s}</td><td>{1:d}</td><td>{2:s}</td><td>{3:s}</td><td>{4:10.2f}</td><td>{5:10.2f}</td><td>{6:10.2f}</td><td>{7:10.2f}</td><td>{8:10.2f}</td><td>{9:10.2f}</td><td>{10:10.2f}</td><td>{11:10.2f}</td><td>{12:10.2f}</td><td>{13:10.2f}</td><td>{14:10.2f}</td><td>{15:10.2f}</td><td>{16:10.2f}</td><td>{17:10.2f}</td><td>{18:s}</td></tr>'.format(name, number,number1,number2,number3,number4,number5,number6,number7,number8,number9,number10,number11,number12,number13,number14,number15,number16,number17)
+#         return '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' %(name, number,number1,number2,number3,number4,number5,number6,number7,number8,number9,number10,number11,number12,number13,number14,number15,number16,number17)
     tds = []
     monthCurr = str(int( time.strftime('%m',time.localtime(time.time())))-1)
     test2= '<table style="width:100%;" border="1" bordercolor="#000000" cellpadding="2" cellspacing="0">'
@@ -61,18 +69,22 @@ def main():
     sendFail=0
     sendFailInfo=[]
     failInfo=''
+    
     for i in range(2,len(pepoleList)):
-        mailto_list.append(str(pepoleList[i].getEmailAddressParam()))
+        mailto_list.append(str(pepoleList[i].getEmailAddressParam().strip()))
+        test7=str("月工资条".decode("utf-8").encode("gb2312"))
+        subMessage=monthCurr+test7
         j =pepoleList[i].getPayInfoParam()
-        test4=generate_tr(str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(j[4]),str(j[5]),str(j[6]),str(j[7]),str(j[8]),str(j[9]),str(j[10]),str(j[11]),str(j[12]),str(j[13]),str(j[14]),str(j[15]),str(j[16]),str(j[17]),str(j[18]))
-        test1=str(pepoleList[i].getPayInfoParam()[0])+",你好："+"<br/>"+"&nbsp;&nbsp;&nbsp;"+monthCurr+"月工资清单如下，请查阅："+"<br/>"
-        if send_mail(mailto_list,str(pepoleList[i].getPayInfoParam()[0])+monthCurr+"月工资条",test1+test2+test3+test4+test5+test6):  
+        test4=generate_tr(str(j[0].encode("utf-8")),int(j[1]),str(j[2]),str(j[3]),float(j[4]),float(j[5]),float(j[6]),float(j[7]),float(j[8]),float(j[9]),float(j[10]),float(j[11]),float(j[12]),float(j[13]),float(j[14]),float(j[15]),float(j[16]),float(j[17]),str(j[18].encode("utf-8")))
+        test1=str(pepoleList[i].getPayInfoParam()[0].encode("utf-8"))+",你好："+"<br/>"+"&nbsp;&nbsp;&nbsp;"+monthCurr+"月工资清单如下，请查阅："+"<br/>"
+        if send_mail(mailto_list,subMessage,test1+test2+test3+test4+test5+test6):  
             print "发送成功"
             sendSuccess=sendSuccess+1
         else:  
             print "发送失败"
             sendFail=sendFail+1
-            sendFailInfo.append(str(j[0])+','+str(j[1])+','+str(pepoleList[i].getEmailAddressParam()))
+            sendFailInfo.append(str(j[0].encode("utf-8"))+','+str(j[1])+','+str(pepoleList[i].getEmailAddressParam()))
         mailto_list=[]
+        time.sleep(20)
     failInfo="\n".join(sendFailInfo)
     fdbg("total number to send mail:"+str(totalMail)+"\n"+"send success:"+str(sendSuccess)+"\n"+"send fail:"+str(sendFail)+"\n"+"fail information："+"\n"+failInfo)
