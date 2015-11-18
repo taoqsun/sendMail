@@ -14,7 +14,7 @@ mail_postfix="sina.com"  #发件箱的后缀
 
 # mail_host="smtp.qq.com"
 # mail_user="1750999809@qq.com"    #用户名
-# mail_pass=""   #口令 
+# mail_pass="123456kk"   #口令 
 # mail_postfix="qq.com"  #发件箱的后缀
   
 def send_mail(to_list,sub,content):  #to_list：收件人；sub：主题；content：邮件内容
@@ -69,13 +69,30 @@ def main():
     sendFail=0
     sendFailInfo=[]
     failInfo=''
-    
     for i in range(2,len(pepoleList)):
-        mailto_list.append(str(pepoleList[i].getEmailAddressParam().strip()))
+#         mailto_list.append(str(pepoleList[i].getEmailAddressParam().strip()))
+        print 'pepoleList[i].getEmailAddressParam()===',type(pepoleList[i].getEmailAddressParam()),pepoleList[i].getEmailAddressParam()
+        if isinstance(pepoleList[i].getEmailAddressParam(), unicode):
+            mailto_list.append(pepoleList[i].getEmailAddressParam().encode('UTF-8'))
         test7=str("月工资条".decode("utf-8").encode("gb2312"))
         subMessage=monthCurr+test7
         j =pepoleList[i].getPayInfoParam()
-        test4=generate_tr(str(j[0].encode("utf-8")),int(j[1]),str(j[2]),str(j[3]),float(j[4]),float(j[5]),float(j[6]),float(j[7]),float(j[8]),float(j[9]),float(j[10]),float(j[11]),float(j[12]),float(j[13]),float(j[14]),float(j[15]),float(j[16]),float(j[17]),str(j[18].encode("utf-8")))
+        uniList = []
+        
+        for c in [0,2,3,18]:
+#             print j[c],type(j[c]) 
+            if isinstance(j[c],unicode):
+                j[c] = str(j[c].encode("utf-8"))
+                print j[c],type(j[c])
+            elif isinstance(j[c],float):
+                j[c] = str(j[c])
+#                 print j[c],type(j[c])
+        test4=generate_tr(j[0],int(j[1]),j[2],j[3],
+                      float(j[4]),float(j[5]),float(j[6]),float(j[7]),float(j[8]),
+                      float(j[9]),float(j[10]),float(j[11]),
+                      float(j[12]),float(j[13]),float(j[14]),float(j[15]),
+                      float(j[16]),float(j[17]),j[18])    
+                 
         test1=str(pepoleList[i].getPayInfoParam()[0].encode("utf-8"))+",你好："+"<br/>"+"&nbsp;&nbsp;&nbsp;"+monthCurr+"月工资清单如下，请查阅："+"<br/>"
         if send_mail(mailto_list,subMessage,test1+test2+test3+test4+test5+test6):  
             print "发送成功"
