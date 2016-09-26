@@ -6,12 +6,14 @@ Created on Sep 22, 2015
 '''
 import os
 import sys
-
 try:
-    import xlrd
+    from vendors.xlrd.xlrd import *
 except Exception,e:
-    print os.path.split(os.path.dirname(__file__))[0]+'\\vendors\\xlrd-0.9.4&&python setup.py install'
-    os.system("cd /d "+os.path.split(os.path.dirname(__file__))[0]+'\\vendors\\xlrd-0.9.4&&python setup.py install')
+    xldDir = os.path.join(os.path.split(os.path.dirname(__file__))[0],'vendors','xlrd')
+    os.chmod(xldDir, 0o777 )
+    os.chdir(xldDir)
+    #安装xlrd模块
+    os.system('python setup.py install')
     
 class MailMessage(object):
     
@@ -19,7 +21,7 @@ class MailMessage(object):
         pass
     
     def getMailMessage(self):
-        data = xlrd.open_workbook(os.path.split(os.path.dirname(__file__))[0]+'\\vendors\\pay.xlsx')
+        data = open_workbook(os.path.join(os.path.split(os.path.dirname(__file__))[0],'pay.xlsx'))
         table = data.sheets()[0]
         nrows = table.nrows
         ncols = table.ncols
