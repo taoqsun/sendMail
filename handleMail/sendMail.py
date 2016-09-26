@@ -21,7 +21,7 @@ def send_mail(to_list,sub,content):  #to_list：收件人；sub：主题；conte
     #邮件标题
     titleMessage = str("昱沣HR".decode("utf-8").encode("gb2312"))
     
-    me = titleMessage+"<"+mail_user + "@" + mail_postfix+">"   #这里的william sun可以任意设置，收到信后，将按照设置显示
+    me = titleMessage + "<" + mail_user + "@" + mail_postfix+">"   #这里的william sun可以任意设置，收到信后，将按照设置显示
     msg = MIMEText(content,_subtype='html',_charset='utf-8')
     msg['Subject'] = sub    #设置主题
     msg['From'] = me  
@@ -112,7 +112,7 @@ def main():
             print "给 " + pepoleList[i].getEmailAddressParam().encode('UTF-8') + " 发送失败 "
             sendFail = sendFail + 1
             sendFailInfo.append(str(j[0].encode("utf-8")) + ',' +  
-                                str(j[1]) + ',' + str(pepoleList[i].getEmailAddressParam()))
+                                str(j[1]) + ',' + str(pepoleList[i].getEmailAddressParam().encode('UTF-8')))
         mailto_list = []
         time.sleep(20)
     print "所有邮件发送完毕。。。 "
