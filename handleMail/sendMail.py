@@ -11,11 +11,13 @@ import time
 # mail_user=""    #用户名
 # mail_pass=""   #口令 
 # mail_postfix="qq.com"  #发件箱的后缀
+# mail_port = 465
 
-mail_host="smtp.ym.163.com" 
-mail_user=""    #用户名 有些网站需要带上域名
+mail_host="smtp.ym.163.com" #邮件服务器地址
+mail_user=""    #用户名, 有些网站需要带上域名
 mail_pass=""   #密码 
-mail_postfix="yufeng588.com"  #发件箱的后缀
+mail_postfix=""  #发件箱的后缀
+mail_port = 994 #邮件服务器发送端口
   
 def send_mail(to_list,sub,content):  #to_list：收件人；sub：主题；content：邮件内容
     #邮件标题
@@ -26,9 +28,8 @@ def send_mail(to_list,sub,content):  #to_list：收件人；sub：主题；conte
     msg['Subject'] = sub    #设置主题
     msg['From'] = me  
     msg['To'] = ";".join(to_list)  
-    try:  
-#         s = smtplib.SMTP_SSL("smtp.qq.com",465, timeout=30)
-        s = smtplib.SMTP_SSL(mail_host,994, timeout=30)  #邮件服务器地址，注意这里的设置是邮箱的设置，端口号需要特别注意
+    try:
+        s = smtplib.SMTP_SSL(mail_host,mail_port, timeout=30)  #邮件服务器地址，注意这里的设置是邮箱的设置，端口号需要特别注意
         s.login(mail_user,mail_pass)  
         s.sendmail(me, to_list, msg.as_string())  
         s.close()  
@@ -106,18 +107,26 @@ def main():
             ",你好：" + "<br/>" + "&nbsp;&nbsp;&nbsp;" + monthCurr + "月工资清单如下，请查阅：" + "<br/>"
         
         if send_mail(mailto_list,subMessage,test1+test2+test3+test4+test5+test6):  
-            print "给 " + pepoleList[i].getEmailAddressParam().encode('UTF-8') +" 发送成功 "
+            print "给 " + str(pepoleList[i].getEmailAddressParam().encode('UTF-8')) +" 发送成功 "
             sendSuccess = sendSuccess + 1
         else:  
-            print "给 " + pepoleList[i].getEmailAddressParam().encode('UTF-8') + " 发送失败 "
+            print "给 " + str(pepoleList[i].getEmailAddressParam()) + " 发送失败 "
             sendFail = sendFail + 1
             sendFailInfo.append(str(j[0].encode("utf-8")) + ',' +  
-                                str(j[1]) + ',' + str(pepoleList[i].getEmailAddressParam().encode('UTF-8')))
+                                str(j[1]) + ',' + str(pepoleList[i].getEmailAddressParam()))
         mailto_list = []
-        time.sleep(20)
+        
+        if i != len(pepoleList) - 1:
+            print "等待20秒后，发送下一个。。。"
+            time.sleep(20)
+        
     print "所有邮件发送完毕。。。 "
     
     failInfo = "\n".join(sendFailInfo)
+    print "total number to send mail:" + str(totalMail) + "\n" + \
+         "send success:"+str(sendSuccess) + "\n" + "send fail:" + str(sendFail) + \
+         "\n" + "fail information：" + "\n" + failInfo
     fdbg("total number to send mail:" + str(totalMail) + "\n" + 
          "send success:"+str(sendSuccess) + "\n" + "send fail:" + str(sendFail) +
          "\n" + "fail information：" + "\n" + failInfo)
+    
