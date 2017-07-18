@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 import smtplib  
 from email.mime.text import MIMEText
 from getMailMessage import MailMessage
